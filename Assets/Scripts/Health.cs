@@ -18,21 +18,33 @@ public class Health : MonoBehaviour
 
     void Awake()
     {
-        cameraShake = Camera.main.GetComponent<CameraShake>();
-        audioPlayer = FindObjectOfType<AudioPlayer>();
-        scoreKeeper = FindObjectOfType<ScoreKeeper>();
-        levelManager = FindObjectOfType<LevelManager>();
+        cameraShake = Camera.main != null ? Camera.main.GetComponent<CameraShake>() : null;
+        if (cameraShake == null)
+            Debug.LogWarning("CameraShake component not found on Main Camera.");
+
+        audioPlayer = Object.FindFirstObjectByType<AudioPlayer>();
+        if (audioPlayer == null)
+            Debug.LogWarning("AudioPlayer not found in the scene.");
+
+        scoreKeeper = Object.FindFirstObjectByType<ScoreKeeper>();
+        if (scoreKeeper == null)
+            Debug.LogWarning("ScoreKeeper not found in the scene.");
+
+        levelManager = Object.FindFirstObjectByType<LevelManager>();
+        if (levelManager == null)
+            Debug.LogWarning("LevelManager not found in the scene.");
     }
 
     void OnTriggerEnter2D(Collider2D other)
     {
         DamageDealer damageDealer = other.GetComponent<DamageDealer>();
 
-        if(damageDealer != null)
+        if (damageDealer != null)
         {
             TakeDamage(damageDealer.GetDamage());
             PlayHitEffect();
-            audioPlayer.PlayDamageClip();
+            if (audioPlayer != null)
+                audioPlayer.PlayDamageClip();
             ShakeCamera();
             damageDealer.Hit();
         }
@@ -46,7 +58,7 @@ public class Health : MonoBehaviour
     void TakeDamage(int damage)
     {
         health -= damage;
-        if(health <= 0)
+        if (health <= 0)
         {
             Die();
         }
@@ -54,7 +66,7 @@ public class Health : MonoBehaviour
 
     void Die()
     {
-        if(!isPlayer)
+        if (!isPlayer)
         {
             scoreKeeper.ModifyScore(score);
         }
@@ -67,7 +79,7 @@ public class Health : MonoBehaviour
 
     void PlayHitEffect()
     {
-        if(hitEffect != null)
+        if (hitEffect != null)
         {
             ParticleSystem instance = Instantiate(hitEffect, transform.position, Quaternion.identity);
             Destroy(instance.gameObject, instance.main.duration + instance.main.startLifetime.constantMax);
@@ -76,7 +88,7 @@ public class Health : MonoBehaviour
 
     void ShakeCamera()
     {
-        if(cameraShake != null && applyCameraShake)
+        if (cameraShake != null && applyCameraShake)
         {
             cameraShake.Play();
         }

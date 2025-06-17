@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
@@ -19,7 +19,12 @@ public class UIGameOver : MonoBehaviour
     {
         scoreText.text = "You Scored:\n" + scoreKeeper.GetScore();
 
-        ASM_MN.YC1();
+        // Assuming you need to pass playerName, score, and regionID to YC1
+        string playerName = "Player1"; // Replace with actual player name
+        int score = scoreKeeper.GetScore(); // Replace with actual score
+        int regionID = 1; // Replace with actual region ID
+
+        ASM_MN.YC1(playerName, score, regionID);
         ASM_MN.YC2();
         ASM_MN.YC3();
         ASM_MN.YC4();
@@ -27,8 +32,4 @@ public class UIGameOver : MonoBehaviour
         ASM_MN.YC6();
         ASM_MN.YC7();
     }
-
-    
-
-
 }

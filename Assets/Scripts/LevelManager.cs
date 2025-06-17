@@ -49,9 +49,27 @@ public class LevelManager : MonoBehaviour
 
     public void LoadGame()
     {
-        if (userName.text.Trim().Length == 0) return;
-        ScoreKeeper.Instance.ResetScore(userName.text, dropdown.value);
-        SceneManager.LoadScene("Game");
+        if (userName == null)
+        {
+            Debug.LogError("userName InputField is not assigned in the Inspector.");
+            return;
+        }
+        if (dropdown == null)
+        {
+            Debug.LogError("dropdown is not assigned in the Inspector.");
+            return;
+        }
+        if (ScoreKeeper.Instance == null)
+        {
+            Debug.LogError("ScoreKeeper instance not found in the scene.");
+            return;
+        }
+
+        if (userName.text.Trim().Length != 0)
+        {
+            ScoreKeeper.Instance.ResetScore(userName.text, dropdown.value);
+            SceneManager.LoadScene("Game");
+        }
     }
 
     public void LoadMainMenu()
@@ -75,4 +93,6 @@ public class LevelManager : MonoBehaviour
         yield return new WaitForSeconds(delay);
         SceneManager.LoadScene(sceneName);
     }
+
+   
 }
